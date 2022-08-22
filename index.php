@@ -7,12 +7,6 @@ include('inc/nav.php')
 ?>
 
 
-<body class="multi-page">
-
-
-	
-	<div class="close-btn fa fa-times"></div>
-
 	
 	<!-- SHOP CONTENT -->
 	<section id="content">
@@ -20,7 +14,7 @@ include('inc/nav.php')
 			<div class="container">
 				<div class="row">
 					<div class="page_header text-center">
-						<h2>Shop</h2>
+						<h2>Hello People</h2>
 						<p>You can order food from here</p>
 					</div>
 					<div class="col-md-12">
