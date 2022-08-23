@@ -1,8 +1,5 @@
-
-
 <?php 
-
-
+session_start();
 require_once '../config/connect.php'; 
 if(isset($_POST) & !empty($_POST)){
 	$email = mysqli_real_escape_string($connection, $_POST['email']);
@@ -11,7 +8,7 @@ if(isset($_POST) & !empty($_POST)){
 	$result = mysqli_query($connection, $sql) or die(mysqli_error($connection));
 	$count = mysqli_num_rows($result);
 	if($count == 1){
-		echo "User exits, create session";
+		//echo "User exits, create session";
 		$_SESSION['email'] = $email;
 		header("location: index.php");
 	}else{
@@ -94,3 +91,4 @@ include('inc/header.php');
 include('inc/footer.php')
 
 ?>
+}
