@@ -1,8 +1,8 @@
 <?php
 
-$db=mysqli_connect("localhost", "root", "","homefeast");
+$connection=mysqli_connect("localhost", "root", "","homefeast");
 
-if(!$db)
+if(!$connection)
 {
     echo "database not connected";
 }
@@ -10,4 +10,4 @@ if(!$db)
 else{
     echo "database connected";
 }
-
+?>

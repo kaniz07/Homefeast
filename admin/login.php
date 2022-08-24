@@ -1,6 +1,9 @@
 <?php 
 session_start();
-require_once '../config/connect.php'; 
+
+
+include('../config/connect.php');
+
 if(isset($_POST) & !empty($_POST)){
 	$email = mysqli_real_escape_string($connection, $_POST['email']);
 	$password = md5($_POST['password']);
@@ -38,9 +41,9 @@ include('inc/header.php');
 				<div class="row shop-login">
 				<div class="col-md-6 col-md-offset-3">
 					<div class="box-content">
-						<h3 class="heading text-center">I'm a Returning Customer</h3>
+						<h3 class="heading text-center"></h3>
 						<div class="clearfix space40"></div>
-						<form class="logregform" method = "POST">
+						<form class="logregform" method = "post">
 							<div class="row">
 								<div class="form-group">
 									<div class="col-md-12">
