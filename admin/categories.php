@@ -6,6 +6,7 @@
 	if(!isset($_SESSION['email']) & empty($_SESSION['email'])){
 		header('location: login.php');
 	}
+	
 ?>
  
  
@@ -29,11 +30,17 @@ include ('inc/header.php');?>
 					</tr>
 				</thead>
 				<tbody>
+					<?php 
+					$sql = "SELECT * FROM category";
+					$res = mysqli_query($connection, $sql);
+					while ($r = mysqli_fetch_assoc($res)){
+						?>
 				<tr>
-					<th scope ="row">S.NO</th>
-					<td>Category Name</td>
-					<td><a href="#">Edit</a> | <a href="#">Delete</a></td>
+					<th scope ="row"><?php echo $r['id']; ?></th>
+					<td><?php echo $r['name']; ?></td>
+					<td><a href="editcategory.php?id=<?php echo $r['id']; ?>">Edit</a> | <a href="deletecategory.php?id=<?php echo $r['id']; ?>">Delete</a></td>
 </tr>
+<?php } ?>
 				</tbody>
 			</table>
 			
