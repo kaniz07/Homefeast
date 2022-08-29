@@ -1,14 +1,16 @@
 <?php
 	session_start();
-	require_once '../config/connect.php';
+	include('../config/connect.php');
 	if(!isset($_SESSION['email']) & empty($_SESSION['email'])){
 		header('location: login.php');
 	}
 	if(isset($_POST)  & !empty($_POST)){
-		$name = mysqli_real_escape_string($connection, $_POST['itemname']);
-		$description = mysqli_real_escape_string($connection, $_POST['itemdescription']);
+		$foodname = mysqli_real_escape_string($connection, $_POST['itemname']);
 		$category = mysqli_real_escape_string($connection, $_POST['itemcategory']);
 		$price = mysqli_real_escape_string($connection, $_POST['price']);
+		$food_description = mysqli_real_escape_string($connection, $_POST['itemdescription']);
+	
+		
 
 if(isset($_FILES)  & !empty($_FILES)){
 	$name=$_FILES['productimage'] ['name'];
@@ -38,7 +40,7 @@ if(isset($_FILES)  & !empty($_FILES)){
 
 
 
-		$sql ="INSERT INTO items (name, description, catid, price) VALUES ('$name', '$description', '$category', '$price')";
+		$sql ="INSERT INTO item (foodname, categoryid, price, food_description) VALUES ('$foodname', '$category', '$price', '$food_description')";
 		$res = mysqli_query($connection, $sql);
 		if($res) {
 			echo "item created";
@@ -59,19 +61,15 @@ include('inc/nav.php')
 <section id="content">
 	<div class="content-blog">
 		<div class="container">
-			<form method="post">
+			<form method="POST">
 			  <div class="form-group">
-			    <label for="Productname">Item Name</label>
-			    <input type="text" class="form-control" name="productname" id="Productname" placeholder="Item Name">
-			  </div>
-			  <div class="form-group">
-			    <label for="productdescription">Item Description</label>
-			    <textarea class="form-control" name="productdescription" rows="3"></textarea>
+			    <label for="itemname">Item Name</label>
+			    <input type="text" class="form-control" name="itemname" id="itemname" placeholder="Item Name">
 			  </div>
 
 			  <div class="form-group">
-			    <label for="productcategory">Item Category</label>
-			    <select class="form-control" id="productcategory" name="productcategory">
+			    <label for="itemcategory">Item Category</label>
+			    <select class="form-control" id="itemcategory" name="itemcategory">
 				  <option value="">---SELECT CATEGORY---</option>
 				  <?php 
 					$sql = "SELECT * FROM category";
@@ -82,12 +80,21 @@ include('inc/nav.php')
 					<?php } ?>
 				</select>
 			  </div>
-			  
 
 			  <div class="form-group">
-			    <label for="productprice"> Price</label>
-			    <input type="text" class="form-control" name="productprice" id="productprice" placeholder=" Price">
+			    <label for="price"> Price</label>
+			    <input type="text" class="form-control" name="price" id="price" placeholder=" Price">
 			  </div>
+
+			  <div class="form-group">
+			    <label for="itemdescription">Item Description</label>
+			    <textarea class="form-control" name="itemdescription" rows="3"></textarea>
+			  </div>
+
+			  
+			  
+
+			  
 			  <div class="form-group">
 			    <label for="productimage"> Image</label>
 			    <input type="file" name="productimage" id="productimage">
