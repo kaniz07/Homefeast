@@ -1,4 +1,6 @@
 <?php
+session_start();
+require_once 'config/connect.php';
 include('inc/header.php');
 include('inc/nav.php')
 ?>
@@ -19,12 +21,17 @@ include('inc/nav.php')
 					<div class="box-content">
 						<h3 class="heading text-center">I'm a Returning Customer</h3>
 						<div class="clearfix space40"></div>
-						<form class="logregform">
+						<?php if(isset($_GET['message'])) { 
+							if($_GET['message'] ==1) { 
+							 ?><div class="alert alert-danger" role="alert"> <?php echo "Invalid login"; ?> </div> 
+							 <?php }} ?>
+						
+						<form class="logregform" method="post" action="loginprocess.php">
 							<div class="row">
 								<div class="form-group">
 									<div class="col-md-12">
-										<label>Username or E-mail Address</label>
-										<input type="text" value="" class="form-control">
+										<label> E-mail Address</label>
+										<input type="email" name="email" value="" class="form-control">
 									</div>
 								</div>
 							</div>
@@ -32,20 +39,20 @@ include('inc/nav.php')
 							<div class="row">
 								<div class="form-group">
 									<div class="col-md-12">
-										<a class="pull-right" href="#">(Lost Password?)</a>
+										<!--<a class="pull-right" href="#">(Lost Password?)</a> -->
 										<label>Password</label>
-										<input type="password" value="" class="form-control">
+										<input type="password" name="password" value="" class="form-control">
 									</div>
 								</div>
 							</div>
 							<div class="clearfix space20"></div>
 							<div class="row">
 								<div class="col-md-6">
-									<span class="remember-box checkbox">
+									<!--<span class="remember-box checkbox">
 									<label for="rememberme">
 									<input type="checkbox" id="rememberme" name="rememberme">Remember Me
 									</label>
-									</span>
+									</span> -->
 								</div>
 								<div class="col-md-6">
 									<button type="submit" class="button btn-md pull-right">Login</button>
@@ -58,12 +65,17 @@ include('inc/nav.php')
 					<div class="box-content">
 						<h3 class="heading text-center">Register An Account</h3>
 						<div class="clearfix space40"></div>
-						<form class="logregform">
+						<?php if(isset($_GET['message'])) { 
+							if($_GET['message'] ==2) { 
+							 ?><div class="alert alert-danger" role="alert"> <?php echo "Failed to register"; ?> </div> 
+							 <?php }} ?>
+						
+						<form class="logregform" method="post" action="registerprocess.php">
 							<div class="row">
 								<div class="form-group">
 									<div class="col-md-12">
 										<label>E-mail Address</label>
-										<input type="text" value="" class="form-control">
+										<input type="email" name="email" value="" class="form-control">
 									</div>
 								</div>
 							</div>
@@ -72,11 +84,11 @@ include('inc/nav.php')
 								<div class="form-group">
 									<div class="col-md-6">
 										<label>Password</label>
-										<input type="password" value="" class="form-control">
+										<input type="password"  name="password" value="" class="form-control">
 									</div>
 									<div class="col-md-6">
 										<label>Re-enter Password</label>
-										<input type="password" value="" class="form-control">
+										<input type="password" name ="passwordagain" value="" class="form-control">
 									</div>
 								</div>
 							</div>
