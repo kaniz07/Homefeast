@@ -25,13 +25,21 @@ include('inc/nav.php')
 </tr>
 </thead>
 <tbody>
+<?php 
+					$sql = "SELECT * FROM item";
+					$res = mysqli_query($connection, $sql);
+					while ($r = mysqli_fetch_assoc($res)){
+						?>
+
 	<tr>
-		<th scope="row">S.No</th>
-		<td>Item name</td>
-		<td>Category name</td>
-		<td>Yes/No</td>
-		<td><a href="#">Edit</a> | <a href="#">Delete</a></td>
+		<th scope="row"><?php echo $r['id']; ?></th>
+		<td><?php echo $r['name']; ?></td>
+		<td><?php echo $r['catid']; ?></td>
+		<td><?php if($r['thumb']){echo "yes";}else{echo "no";} ?></td>
+		<td><a href="edititem.php?id=<?php echo $r['id']; ?>">Edit</a> | <a href="deleteitem.php?id=<?php echo $r['id']; ?>">Delete</a></td>
 </tr>
+<?php } ?>
+
 </tbody>
 </table>
 </div>

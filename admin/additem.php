@@ -1,102 +1,100 @@
 <?php
 	session_start();
-	include('../config/connect.php');
+	require_once '../config/connect.php';
 	if(!isset($_SESSION['email']) & empty($_SESSION['email'])){
 		header('location: login.php');
 	}
-	if(isset($_POST)  & !empty($_POST)){
-		$foodname = mysqli_real_escape_string($connection, $_POST['itemname']);
-		$category = mysqli_real_escape_string($connection, $_POST['itemcategory']);
-		$price = mysqli_real_escape_string($connection, $_POST['price']);
-		$food_description = mysqli_real_escape_string($connection, $_POST['itemdescription']);
-	
-		
 
-if(isset($_FILES)  & !empty($_FILES)){
-	$name=$_FILES['productimage'] ['name'];
-	$size=$_FILES['productimage'] ['size'];
-	$type=$_FILES['productimage'] ['type'];
-	$tmp_name=$_FILES['productimage'] ['tmp_name'];
+	if(isset($_POST) & !empty($_POST)){
+		$name = mysqli_real_escape_string($connection, $_POST['productname']);
+		$description = mysqli_real_escape_string($connection, $_POST['productdescription']);
+		$category = mysqli_real_escape_string($connection, $_POST['productcategory']);
+		$price = mysqli_real_escape_string($connection, $_POST['productprice']);
 
-	$max_size= 1000000;
-	$extension = substr($name, strpos($name,'.') + 1);
 
-	if (isset($name)  & !empty($name)){
-		if(($extension == 'jpg' || $extension == 'jpeg') & type == 'image/jpeg' & $size<=$max_size){
-			$location = 'uploads/';
-			if(move_uploaded_file($tmp_name, $location.$name)){
-				echo "uploaded successfully";
-			} else {
-				echo "failed to upload";
+		if(isset($_FILES) & !empty($_FILES)){
+			$name = $_FILES['productimage']['name'];
+			$size = $_FILES['productimage']['size'];
+			$type = $_FILES['productimage']['type'];
+			$tmp_name = $_FILES['productimage']['tmp_name'];
+
+			$max_size = 100000000;
+			$extension = substr($name, strpos($name, '.') + 1);
+
+			if(isset($name) && !empty($name)){
+				if(($extension == "jpg" || $extension == "jpeg") && $type == "image/jpeg" && $size<=$max_size){
+					$location = "uploads/";
+					if(move_uploaded_file($tmp_name, $location.$name)){
+						echo "Uploaded Successfully";
+						$sql = "INSERT INTO item (name, catid, price, thumb, description) 
+						VALUES ('$name',  '$category', '$price', '$location$name', '$description')";
+						$res = mysqli_query($connection, $sql);
+						if($res){
+							//echo "Product Created";
+							header('location: items.php');
+						}else{
+							echo "Failed to Create Product";
+						}
+					}else{
+						echo "Failed to Upload File";
+					}
+				}else{
+					echo "Only JPG files are allowed and should be less that 1MB";
+				}
+			}else{
+				echo "Please Select a File";
 			}
-		}else {
-			echo "only jpg files are allowed and should be less than 1MB";
-		}
-		}else {
-			echo "Please select a file";
+		}else{
+
+			$sql = "INSERT INTO item (name,  catid, price,description,) VALUES ('$name', '$category', '$price','$description')";
+			$res = mysqli_query($connection, $sql);
+			if($res){
+				header('location: items.php');
+			}else{
+				echo  "Failed to Create Product";
+			}
 		}
 	}
-}
-
-
-
-		$sql ="INSERT INTO item (foodname, categoryid, price, food_description) VALUES ('$foodname', '$category', '$price', '$food_description')";
-		$res = mysqli_query($connection, $sql);
-		if($res) {
-			echo "item created";
-		}else{
-			echo "failed";
-		}
+?>
+<?php include 'inc/header.php'; ?>
+<?php include 'inc/nav.php'; ?>
 	
-
-
-?>
-
-<?php
-include('inc/header.php');
-include('inc/nav.php')
-?>
-
-
 <section id="content">
 	<div class="content-blog">
 		<div class="container">
-			<form method="POST">
+		<?php if(isset($fmsg)){ ?><div class="alert alert-danger" role="alert"> <?php echo $fmsg; ?> </div><?php } ?>
+		<?php if(isset($smsg)){ ?><div class="alert alert-success" role="alert"> <?php echo $smsg; ?> </div><?php } ?>
+			<form method="post" enctype="multipart/form-data">
 			  <div class="form-group">
-			    <label for="itemname">Item Name</label>
-			    <input type="text" class="form-control" name="itemname" id="itemname" placeholder="Item Name">
+			    <label for="Productname">Product Name</label>
+			    <input type="text" class="form-control" name="productname" id="Productname" placeholder="Product Name">
+			  </div>
+			  <div class="form-group">
+			    <label for="productdescription">Product Description</label>
+			    <textarea class="form-control" name="productdescription" rows="3"></textarea>
 			  </div>
 
 			  <div class="form-group">
-			    <label for="itemcategory">Item Category</label>
-			    <select class="form-control" id="itemcategory" name="itemcategory">
+			    <label for="productcategory">Product Category</label>
+			    <select class="form-control" id="productcategory" name="productcategory">
 				  <option value="">---SELECT CATEGORY---</option>
-				  <?php 
+				  <?php 	
 					$sql = "SELECT * FROM category";
-					$res = mysqli_query($connection, $sql);
-					while ($r = mysqli_fetch_assoc($res)){
-						?>
-						<option value="<?php echo $r['id']; ?>"><?php echo $r['name'];?></option>
-					<?php } ?>
+					$res = mysqli_query($connection, $sql); 
+					while ($r = mysqli_fetch_assoc($res)) {
+				?>
+					<option value="<?php echo $r['id']; ?>"><?php echo $r['name']; ?></option>
+				<?php } ?>
 				</select>
 			  </div>
+			  
 
 			  <div class="form-group">
-			    <label for="price"> Price</label>
-			    <input type="text" class="form-control" name="price" id="price" placeholder=" Price">
+			    <label for="productprice">Product Price</label>
+			    <input type="text" class="form-control" name="productprice" id="productprice" placeholder="Product Price">
 			  </div>
-
 			  <div class="form-group">
-			    <label for="itemdescription">Item Description</label>
-			    <textarea class="form-control" name="itemdescription" rows="3"></textarea>
-			  </div>
-
-			  
-			  
-
-			  
-			  <div class="form-group">
-			    <label for="productimage"> Image</label>
+			    <label for="productimage">Product Image</label>
 			    <input type="file" name="productimage" id="productimage">
 			    <p class="help-block">Only jpg/png are allowed.</p>
 			  </div>
@@ -109,15 +107,5 @@ include('inc/nav.php')
 
 </section>
 	
-	<div class="clearfix space70"></div>
-	
-</div>
-
-</body>
-<?php
-
-include('inc/footer.php')
-
-?>
-
-</html>
+<div class="clearfix space70"></div>
+<?php include 'inc/footer.php' ?>
