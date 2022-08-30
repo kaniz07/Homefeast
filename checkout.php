@@ -6,45 +6,50 @@ if(!isset($_SESSION['customer']) & empty($_SESSION['customer'])){
 }
 include('inc/header.php');
 include('inc/nav.php');
+$userid= $_SESSION['customerid'];
 
 if(isset($_POST) & !empty($_POST)){
 	if($_POST['agree'] ==true){
-	$country = $_POST['country'];
-	$firstname = $_POST['firstname'];
-	$lastname = $_POST['lastname'];
-	$company = $_POST['company'];
-	$address1 = $_POST['address1'];
-	$address2 = $_POST['address2'];
-	$city = $_POST['city'];
-	$area = $_POST['area'];
-	$zipcode = $_POST['zipcode'];
-	$phone = $_POST['phone'];
-	$payment = $_POST['payment'];
-	$userid= $_SESSION['customerid'];
+	$country = filter_var($_POST['country'],FILTER_SANITIZE_STRING );
+	$firstname = filter_var($_POST['firstname'],FILTER_SANITIZE_STRING);
+	$lastname = filter_var($_POST['lastname'],FILTER_SANITIZE_STRING);
+	$company = filter_var($_POST['company'],FILTER_SANITIZE_STRING);
+	$address1 = filter_var($_POST['address1'],FILTER_SANITIZE_STRING);
+	$address2 = filter_var($_POST['address2'],FILTER_SANITIZE_STRING);
+	$city = filter_var($_POST['city'],FILTER_SANITIZE_STRING);
+	$zip = filter_var($_POST['zipcode'],FILTER_SANITIZE_NUMBER_INT);
+	$mobile = filter_var($_POST['mobile'],FILTER_SANITIZE_NUMBER_INT);
+	$payment = filter_var($_POST['payment'],FILTER_SANITIZE_STRING);
+	
 
 	$sql = "SELECT * FROM usersmeta WHERE userid=$userid";
 	$result = mysqli_query($connection, $sql);
+	$r= mysqli_fetch_assoc($result);
 	$count= mysqli_num_rows($result);
 	if($count ==1){
 		//update data in usersmeta
-		echo $usql= " UPDATE usersmeta SET country='$country', firstname='$firstname', lastname='$lastname',
-		address1='$address1', address2='$address2', city='$city', area='$area', zipcode='$zipcode' WHERE userid=$userid";
+		 $usql= " UPDATE usersmeta SET country='$country', firstname='$firstname', lastname='$lastname',company='$company',
+		address1='$address1', address2='$address2', city='$city',  zip='$zip',mobile='$mobile' WHERE userid=$userid";
 		$uresult= mysqli_query($connection,$usql)or die (mysqli_error($connection));
 		if($uresult) {
-			echo "Update orders into order table & order items table-uresult";
+			 //"Update orders into order table & order items table-uresult";
 		}
 	}else {
 		//insert data in usersmeta
-		echo $isql= "INSERT INTO usersmeta (country, firstname, lastname, address1, address2, city, area,zipcode) 
-		VALUES ('$country', '$firstname','$lastname','$address1','$address2','$city','$area','$zipcode')";
+		$isql= "INSERT INTO usersmeta (country, firstname, lastname,company, address1, address2, city, zip,mobile,userid) 
+		VALUES ('$country', '$firstname','$lastname','$company','$address1','$address2','$city','$zip', '$mobile','$userid')";
 		$iresult= mysqli_query($connection,$isql) or die (mysqli_error($connection));
 		if($iresult) {
-			echo "Insert orders into order table & order items table-iresult";
+			// "Insert orders into order table & order items table-iresult";
 	}
 
 }
 }
 }
+$sql = "SELECT * FROM usersmeta WHERE userid=$userid";
+$result = mysqli_query($connection, $sql);
+$r= mysqli_fetch_assoc($result);
+
 
 ?>
 
@@ -96,36 +101,39 @@ if(isset($_POST) & !empty($_POST)){
 								</div>
 								<div class="col-md-6">
 									<label>Last Name </label>
-									<input name="lastname" class="form-control" placeholder="" value="" type="text">
+									<input name="lastname" class="form-control" placeholder="" value="
+									" type="text">
 								</div>
 							</div>
 							<div class="clearfix space20"></div>
 							<label>Company Name</label>
-							<input name="company"  class="form-control" placeholder="" value="" type="text">
+							<input name="company"  class="form-control" placeholder="" value="
+							" type="text">
 							<div class="clearfix space20"></div>
 							<label>Address </label>
-							<input name="address1" class="form-control" placeholder="Street address" value="" type="text">
+							<input name="address1" class="form-control" placeholder="Street address" value="
+							" type="text">
 							<div class="clearfix space20"></div>
 							<input name="address2"  class="form-control" placeholder="Apartment, suite, unit etc. (optional)" value="" type="text">
 							<div class="clearfix space20"></div>
 							<div class="row">
 								<div class="col-md-4">
 									<label> City </label>
-									<input name="city"  class="form-control" placeholder="City" value="" type="text">
+									<input name="city"  class="form-control" placeholder="City" value="
+									" type="text">
 								</div>
+								
 								<div class="col-md-4">
-									<label>Area</label>
-									<input name="area"  class="form-control" value="" placeholder="area" type="text">
-								</div>
-								<div class="col-md-4">
-									<label>Postcode </label>
-									<input name="zipcode" class="form-control" placeholder=" Zip" value="" type="text">
+									<label>Zipcode </label>
+									<input name="zipcode" class="form-control" placeholder=" zip" value="
+								" type="text">
 								</div>
 							</div>
 							
 							<div class="clearfix space20"></div>
-							<label>Phone </label>
-							<input name="phone"  class="form-control" id="billing_phone" placeholder="" value="" type="text">
+							<label>Mobile </label>
+							<input name="mobile"  class="form-control" id="mobile" placeholder="" value="
+							" type="text">
 					
 					</div>
 				</div>
